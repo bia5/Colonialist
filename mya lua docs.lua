@@ -20,6 +20,8 @@ mya_setWindowIcon("assets\\icon.png") --Will try to set mya's window's icon to t
 mya_showCursor(true) --Sets if the os's cursor will show when hovering over mya's window
 mya_getWidth() --Returns an int with mya's window's current width.
 mya_getHeight() --Returns an int with mya's window's current height.
+mya_setUPS(60) --Sets the update rate per second for event_tupdate() callback.
+mya_getUPS() --Returns the ups for event_tupdate callback.
 	
 texture = Texture.new("assets\\texture.png", mya_getRenderer()) --Generates a new texture. Arg1 is the image's path according to "Mya-Yasmine.exe". Arg2 is current renderer so will almost always be "mya_getRenderer()".
 texture:destroy() --Destroys the texture from memory. Only run it when your done using it.
@@ -91,3 +93,4 @@ function event_networkMessage(clientMessage) end --Called when the program recie
 function event_update() end --called on every update loop.
 function event_windowResize(w, h) end --called when window is resized
 function event_render() end --called on render loop.
+function event_tupdate() end --called on every ups tick

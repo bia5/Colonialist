@@ -72,7 +72,7 @@ local dn = false
 local lt = false
 local rt = false
 
-function wr_update()
+function wr_tupdate() 
 	if up then
 		player.y=player.y-playerSpeed
 	end

@@ -61,7 +61,6 @@ end
 function event_update()
 	popups_update()
 	text_fps:setText("FPS "..mya_getFPS(), mya_getRenderer())
-	wr_update()
 end
 
 function event_render()
@@ -70,6 +69,11 @@ function event_render()
 	if devmode == true then
 		text_fps:render(mya_getRenderer())
 	end
+end
+
+mya_setUPS(60)
+function event_tupdate() 
+	wr_tupdate()
 end
 
 while mya_isRunning() do
