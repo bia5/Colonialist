@@ -1,6 +1,6 @@
 local spr = Sprite.new(nil)
 local tilesize = 14
-local tilepix = mya_getHeight()/tilesize
+local tilepix = math.floor(mya_getHeight()/tilesize)
 offsetx = 0
 offsety = 0
 
@@ -10,7 +10,7 @@ function renderSpriteUndertile(x,y)
 		spr:setTexture(assets:getTexture(tile.tex))
 		spr:setX((tile.x*tilepix)+(mya_getWidth()/2)-offsetx)
 		spr:setY((tile.y*tilepix)+(mya_getHeight()/2)-offsety)
-		spr:render(mya_getRenderer(), tilepix+1, tilepix+1)
+		spr:render(mya_getRenderer(), tilepix, tilepix)
 	end
 end
 
@@ -26,9 +26,9 @@ function renderSpriteTile(x,y)
 			spr:setY((tile.y*tilepix)+(mya_getHeight()/2)-offsety)
 		end
 		if tile.w and tile.h then
-			spr:render(mya_getRenderer(), (tilepix*tile.w)+1, (tilepix*tile.h)+1)
+			spr:render(mya_getRenderer(), (tilepix*tile.w), (tilepix*tile.h))
 		else
-			spr:render(mya_getRenderer(), tilepix+1, tilepix+1)
+			spr:render(mya_getRenderer(), tilepix, tilepix)
 		end
 	end
 end
@@ -45,7 +45,7 @@ function renderEntity(ent)
 end
 
 function wr_resize(w,h)
-	tilepix = mya_getHeight()/tilesize
+	tilepix = math.floor(mya_getHeight()/tilesize)
 end
 
 function wr_render()
