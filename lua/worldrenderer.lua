@@ -66,24 +66,43 @@ function wr_render()
 	renderEntity(player)
 end
 
-local playerSpeed = .1
+local playerSpeed = .03
 local up = false
 local dn = false
 local lt = false
 local rt = false
 
 function wr_tupdate() 
+	local aamt = 0
 	if up then
-		player.y=player.y-playerSpeed
+		aamt=1
 	end
 	if lt then
-		player.x=player.x-playerSpeed
+		aamt=aamt+1
 	end
 	if dn then
-		player.y=player.y+playerSpeed
+		aamt=aamt+1
 	end
 	if rt then
-		player.x=player.x+playerSpeed
+		aamt=aamt+1
+	end
+
+	local aplayerSpeed = playerSpeed
+	if aamt > 1 then
+		aplayerSpeed = playerSpeed/3*2
+	end
+
+	if up then
+		player.y=player.y-aplayerSpeed
+	end
+	if lt then
+		player.x=player.x-aplayerSpeed
+	end
+	if dn then
+		player.y=player.y+aplayerSpeed
+	end
+	if rt then
+		player.x=player.x+aplayerSpeed
 	end
 end
 
