@@ -23,6 +23,7 @@ assets:loadTexture("tile_rock_0","assets/tiles/rock_0.png")
 
 -- Entities
 assets:loadTexture("ent_player","assets/entities/player.png")
+assets:loadTexture("ent_pig","assets/entities/pig.png")
 
 -- MENU GUI
 assets:loadTexture("menu_background","assets/gui/menu_background.png")

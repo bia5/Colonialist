@@ -7,6 +7,7 @@ level = {
 
 worldsize = 255
 chunksize = 15
+actualWorldSize = ((worldsize/chunksize)*16)-2
 
 function newTile(id,tex,x,y,callback,w,h,xo,yo)
 	return {id=id,tex=tex,x=x,y=y,callback=callback,w=w,h=h,xo=xo,yo=yo}
@@ -69,11 +70,12 @@ function generateChunkTiles(xx,yy)
 	end
 end
 
-function addEntity(id,tex,x,y)
-	return {id=id,tex=tex,x=x,y=y}
+function addEntity(id,tex,x,y,xoff,yoff)
+	return {id=id,tex=tex,x=x,y=y,xoff=xoff,yoff=yoff}
 end
 
-player = addEntity("player","ent_player",0,0)
+player = addEntity("player","ent_player",0,0,0,2)
+pig = addEntity("pig","ent_pig", 5.5,5.5,0,1)
 
 function generateTiles()
 	print("Generating tiles")

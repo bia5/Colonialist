@@ -4,6 +4,11 @@ local tilepix = math.floor(mya_getHeight()/tilesize)
 offsetx = 0
 offsety = 0
 
+text_x = TextView.new(font, "X 0", 0, (mya_getHeight()/31), mya_getRenderer())
+text_x:setColor(mya_getRenderer(), 15, 15, 15)
+text_y = TextView.new(font, "Y 0", 0, (mya_getHeight()/31)*2, mya_getRenderer())
+text_y:setColor(mya_getRenderer(), 15, 15, 15)
+
 function renderSpriteUndertile(x,y)
 	local tile = getUndertile(x,y)
 	if tile ~= nil then
@@ -35,17 +40,24 @@ end
 
 function renderEntity(ent)
 	if ent ~= nil then
-		offsetx = ent.x*tilepix
-		offsety = ent.y*tilepix
+		if ent.id == "player" then
+			offsetx = ent.x*tilepix
+			offsety = ent.y*tilepix
+		end
 		spr:setTexture(assets:getTexture(ent.tex))
 		spr:setX((ent.x*tilepix)-(tilepix/2)+(mya_getWidth()/2)-offsetx)
-		spr:setY((ent.y*tilepix)-(tilepix*2)+(mya_getHeight()/2)-offsety)
-		spr:render(mya_getRenderer(), tilepix, tilepix*2)
+		spr:setY((ent.y*tilepix)-(tilepix*ent.yoff)+(mya_getHeight()/2)-offsety)
+		spr:render(mya_getRenderer(), tilepix, tilepix*ent.yoff)
 	end
 end
 
 function wr_resize(w,h)
 	tilepix = math.floor(mya_getHeight()/tilesize)
+
+	text_x = TextView.new(font, "X 0", 0, (mya_getHeight()/31), mya_getRenderer())
+	text_x:setColor(mya_getRenderer(), 15, 15, 15)
+	text_y = TextView.new(font, "Y 0", 0, (mya_getHeight()/31)*2, mya_getRenderer())
+	text_y:setColor(mya_getRenderer(), 15, 15, 15)
 end
 
 function wr_render()
@@ -64,6 +76,12 @@ function wr_render()
 	end
 
 	renderEntity(player)
+	renderEntity(pig)
+
+	if devmode == true then
+		text_x:renderWH(mya_getRenderer(), mya_getWidth()/32, mya_getHeight()/32)
+		text_y:renderWH(mya_getRenderer(), mya_getWidth()/32, mya_getHeight()/32)
+	end
 end
 
 local playerSpeed = .03
@@ -104,6 +122,9 @@ function wr_tupdate()
 	if rt then
 		player.x=player.x+aplayerSpeed
 	end
+
+	text_x:setText("X "..math.floor(player.x), mya_getRenderer())
+	text_y:setText("Y "..math.floor(player.y), mya_getRenderer())
 end
 
 function wr_keyDown(key)
