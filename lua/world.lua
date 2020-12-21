@@ -9,8 +9,9 @@ worldsize = 255
 chunksize = 15
 actualWorldSize = ((worldsize/chunksize)*16)-2
 
-function newTile(id,tex,x,y,callback,w,h,xo,yo)
-	return {id=id,tex=tex,x=x,y=y,callback=callback,w=w,h=h,xo=xo,yo=yo}
+function newTile(id,tex,x,y,callback,w,h,xo,yo,isCollidable,onCollideCallback)
+	return {id=id,tex=tex,x=x,y=y,callback=callback,w=w,h=h,xo=xo,yo=yo,
+			isCollidable=isCollidable,onCollideCallback=onCollideCallback}
 end
 
 function getUndertile(x,y)
@@ -28,7 +29,7 @@ function generateChunkUndertiles(xx,yy)
 	level.undertiles[xx.."-"..yy] = {}
 	for y = 0, chunksize do
 		for x = 0, chunksize do
-			level.undertiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("grass","under_grass_0",xx*chunksize+x,yy*chunksize+y,nil)
+			level.undertiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("grass","under_grass_0",xx*chunksize+x,yy*chunksize+y,nil,false,nil)
 		end
 	end
 end
@@ -60,14 +61,27 @@ function generateChunkTiles(xx,yy)
 		for x = 0, chunksize do
 			perc = math.random()
 			if perc > 0.6 and perc < 0.8 then
-				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("treeMedium_0","tile_treeMedium_0",xx*chunksize+x,yy*chunksize+y,nil,1,2,0,-1)
+				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("treeMedium_0","tile_treeMedium_0",xx*chunksize+x,yy*chunksize+y,nil,1,2,0,-1,true,nil)
 			elseif perc > 0.8 and perc < 0.9 then
-				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("bush_0","tile_bush_0",xx*chunksize+x,yy*chunksize+y,nil)
+				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("bush_0","tile_bush_0",xx*chunksize+x,yy*chunksize+y,nil,1,1,0,0,false,nil)
 			elseif perc > 0.95 then
-				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("rock_0","tile_rock_0",xx*chunksize+x,yy*chunksize+y,nil)
+				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("rock_0","tile_rock_0",xx*chunksize+x,yy*chunksize+y,nil,1,1,0,0,true,nil)
 			end
 		end
 	end
+end
+
+function isEntityColliding(x,y) --x,y = entity point
+	xx=math.floor(x)
+	yy=math.floor(y)
+	tile=getTile(xx,yy)
+	if tile ~= nil then
+		if tile.isCollidable then
+			tile.onCollideCallback(tile)
+			return true
+		end
+	end
+	return false
 end
 
 function entityDumbAI(e)
@@ -124,16 +138,24 @@ function entityDumbAI(e)
 		end
 
 		if e.up then
-			e.y=e.y-aplayerSpeed
+			if not isEntityColliding(e.x,e.y-aplayerSpeed) then
+				e.y=e.y-aplayerSpeed
+			end
 		end
 		if e.lt then
-			e.x=e.x-aplayerSpeed
+			if not isEntityColliding(e.x-aplayerSpeed,e.y) then
+				e.x=e.x-aplayerSpeed
+			end
 		end
 		if e.dn then
-			e.y=e.y+aplayerSpeed
+			if not isEntityColliding(e.x,e.y+aplayerSpeed) then
+				e.y=e.y+aplayerSpeed
+			end
 		end
 		if e.rt then
-			e.x=e.x+aplayerSpeed
+			if not isEntityColliding(e.x+aplayerSpeed,e.y) then
+				e.x=e.x+aplayerSpeed
+			end
 		end
 	end
 end

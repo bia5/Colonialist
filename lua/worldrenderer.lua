@@ -112,16 +112,24 @@ function wr_tupdate()
 	end
 
 	if player.up then
-		player.y=player.y-aplayerSpeed
+		if not isEntityColliding(player.x,player.y-aplayerSpeed) then
+			player.y=player.y-aplayerSpeed
+		end
 	end
 	if player.lt then
-		player.x=player.x-aplayerSpeed
+		if not isEntityColliding(player.x-aplayerSpeed,player.y) then
+			player.x=player.x-aplayerSpeed
+		end
 	end
 	if player.dn then
-		player.y=player.y+aplayerSpeed
+		if not isEntityColliding(player.x,player.y+aplayerSpeed) then
+			player.y=player.y+aplayerSpeed
+		end
 	end
 	if player.rt then
-		player.x=player.x+aplayerSpeed
+		if not isEntityColliding(player.x+aplayerSpeed,player.y) then
+			player.x=player.x+aplayerSpeed
+		end
 	end
 
 	for k,v in pairs(level.entities) do
