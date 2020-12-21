@@ -78,7 +78,6 @@ function entityDumbAI(e)
 				e.refresh = 100
 				e.isBreak = false
 			end
-			print("flipped")
 			flip = math.random(4)
 			if flip == 1 then
 				e.up = not e.up
@@ -98,7 +97,7 @@ function entityDumbAI(e)
 			flip = math.random(10)
 			if flip == 1 then
 				e.isBreak = true
-				e.refresh = 7500
+				e.refresh = 750
 				e.up = false
 				e.dn = false
 				e.rt = false
