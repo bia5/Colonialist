@@ -60,6 +60,14 @@ function wr_resize(w,h)
 	text_y:setColor(mya_getRenderer(), 15, 15, 15)
 end
 
+function renderEntityAtY(y)
+	for v,e in pairs(level.entities) do
+		if math.floor(e.y) == y then
+			renderEntity(e)
+		end
+	end
+end
+
 function wr_render()
 	xxx = math.floor(player.x)-15
 	yyy = math.floor(player.y)-8
@@ -70,13 +78,11 @@ function wr_render()
 	end
 
 	for y = yyy, yyy+16 do
+		renderEntityAtY(y)
 		for x = xxx, xxx+30 do
 			renderSpriteTile(x,y)
 		end
 	end
-
-	renderEntity(player)
-	renderEntity(pig)
 
 	if devmode == true then
 		text_x:renderWH(mya_getRenderer(), mya_getWidth()/32, mya_getHeight()/32)
@@ -84,43 +90,44 @@ function wr_render()
 	end
 end
 
-local playerSpeed = .03
-local up = false
-local dn = false
-local lt = false
-local rt = false
-
 function wr_tupdate() 
+	player = getPlayer()
 	local aamt = 0
-	if up then
+	if player.up then
 		aamt=1
 	end
-	if lt then
+	if player.lt then
 		aamt=aamt+1
 	end
-	if dn then
+	if player.dn then
 		aamt=aamt+1
 	end
-	if rt then
+	if player.rt then
 		aamt=aamt+1
 	end
 
-	local aplayerSpeed = playerSpeed
+	local aplayerSpeed = player.moveSpeed
 	if aamt > 1 then
-		aplayerSpeed = playerSpeed/3*2
+		aplayerSpeed = player.moveSpeed/3*2
 	end
 
-	if up then
+	if player.up then
 		player.y=player.y-aplayerSpeed
 	end
-	if lt then
+	if player.lt then
 		player.x=player.x-aplayerSpeed
 	end
-	if dn then
+	if player.dn then
 		player.y=player.y+aplayerSpeed
 	end
-	if rt then
+	if player.rt then
 		player.x=player.x+aplayerSpeed
+	end
+
+	for k,v in pairs(level.entities) do
+		if v.updateCallback ~= nil then
+			v.updateCallback(v)
+		end
 	end
 
 	text_x:setText("X "..math.floor(player.x), mya_getRenderer())
@@ -128,31 +135,33 @@ function wr_tupdate()
 end
 
 function wr_keyDown(key)
+	player = getPlayer()
 	if key == "w" then
-		up = true
+		player.up = true
 	end
 	if key == "a" then
-		lt = true
+		player.lt = true
 	end
 	if key == "s" then
-		dn = true
+		player.dn = true
 	end
 	if key == "d" then
-		rt = true
+		player.rt = true
 	end
 end
 
 function wr_keyUp(key)
+	player = getPlayer()
 	if key == "w" then
-		up = false
+		player.up = false
 	end
 	if key == "a" then
-		lt = false
+		player.lt = false
 	end
 	if key == "s" then
-		dn = false
+		player.dn = false
 	end
 	if key == "d" then
-		rt = false
+		player.rt = false
 	end
 end

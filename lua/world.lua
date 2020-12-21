@@ -70,12 +70,92 @@ function generateChunkTiles(xx,yy)
 	end
 end
 
-function addEntity(id,tex,x,y,xoff,yoff)
-	return {id=id,tex=tex,x=x,y=y,xoff=xoff,yoff=yoff}
+function entityDumbAI(e)
+	if e ~= nil then
+		shouldFlip = math.random(e.refresh)
+		if shouldFlip == 1 then
+			if e.isBreak == true then
+				e.refresh = 100
+				e.isBreak = false
+			end
+			print("flipped")
+			flip = math.random(4)
+			if flip == 1 then
+				e.up = not e.up
+			end
+			flip = math.random(4)
+			if flip == 1 then
+				e.dn = not e.dn
+			end
+			flip = math.random(4)
+			if flip == 1 then
+				e.rt = not e.rt
+			end
+			flip = math.random(4)
+			if flip == 1 then
+				e.lt = not e.lt
+			end
+			flip = math.random(10)
+			if flip == 1 then
+				e.isBreak = true
+				e.refresh = 7500
+				e.up = false
+				e.dn = false
+				e.rt = false
+				e.lt = false
+			end
+		end
+		local aamt = 0
+		if e.up then
+			aamt=1
+		end
+		if e.lt then
+			aamt=aamt+1
+		end
+		if e.dn then
+			aamt=aamt+1
+		end
+		if e.rt then
+			aamt=aamt+1
+		end
+
+		local aplayerSpeed = e.moveSpeed
+		if aamt > 1 then
+			aplayerSpeed = e.moveSpeed/3*2
+		end
+
+		if e.up then
+			e.y=e.y-aplayerSpeed
+		end
+		if e.lt then
+			e.x=e.x-aplayerSpeed
+		end
+		if e.dn then
+			e.y=e.y+aplayerSpeed
+		end
+		if e.rt then
+			e.x=e.x+aplayerSpeed
+		end
+	end
 end
 
-player = addEntity("player","ent_player",0,0,0,2)
-pig = addEntity("pig","ent_pig", 5.5,5.5,0,1)
+function getPlayer()
+	for k,v in pairs(level.entities) do
+		if v.id == "player" then
+			return v
+		end
+	end
+	return nil
+end
+
+function addEntity(id,tex,x,y,xoff,yoff,updateCallback,mvSpeed)
+	return {id=id,tex=tex,x=x,y=y,xoff=xoff,yoff=yoff,updateCallback=updateCallback,
+			up=false,dn=false,lt=false,rt=false,moveSpeed=mvSpeed,refresh=100,isBreak=false}
+end
+
+player = addEntity("player","ent_player",0,0,0,2,nil,0.03)
+table.insert(level.entities,addEntity("pig","ent_pig", 5.5,5.5,0,1,entityDumbAI,0.03))
+table.insert(level.entities,player)
 
 function generateTiles()
 	print("Generating tiles")
