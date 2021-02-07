@@ -60,7 +60,7 @@ function generateChunkTiles(xx,yy)
 	for y = 0, chunksize do
 		for x = 0, chunksize do
 			perc = math.random()
-			if perc > 0.6 and perc < 0.8 then
+			if perc > 0.7 and perc < 0.8 then
 				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("treeMedium_0","tile_treeMedium_0",xx*chunksize+x,yy*chunksize+y,nil,1,2,0,-1,true,nil)
 			elseif perc > 0.8 and perc < 0.9 then
 				level.tiles[xx.."-"..yy][(xx*chunksize)+x.."-"..(yy*chunksize)+y] = newTile("bush_0","tile_bush_0",xx*chunksize+x,yy*chunksize+y,nil,1,1,0,0,false,nil)
@@ -77,9 +77,23 @@ function isEntityColliding(x,y) --x,y = entity point
 	tile=getTile(xx,yy)
 	if tile ~= nil then
 		if tile.isCollidable then
-			tile.onCollideCallback(tile)
+			if tile.onCollideCallback ~= nil then
+				tile.onCollideCallback(tile)
+			end
 			return true
 		end
+	end
+	if x < 0 then
+		return true
+	end
+	if y < 0 then
+		return true 
+	end
+	if x > actualWorldSize then
+		return true
+	end
+	if y > actualWorldSize then
+		return true 
 	end
 	return false
 end
@@ -174,9 +188,11 @@ function addEntity(id,tex,x,y,xoff,yoff,updateCallback,mvSpeed)
 			up=false,dn=false,lt=false,rt=false,moveSpeed=mvSpeed,refresh=100,isBreak=false}
 end
 
-player = addEntity("player","ent_player",0,0,0,2,nil,0.03)
-table.insert(level.entities,addEntity("pig","ent_pig", 5.5,5.5,0,1,entityDumbAI,0.03))
-table.insert(level.entities,player)
+player = addEntity("player","ent_player",128,128,0,2,nil,0.04)
+for i=0,100 do
+	table.insert(level.entities,addEntity("pig","ent_pig", 128,128,0,1,entityDumbAI,0.03))
+	table.insert(level.entities,player)
+end
 
 function generateTiles()
 	print("Generating tiles")

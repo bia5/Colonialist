@@ -62,8 +62,10 @@ end
 
 function renderEntityAtY(y)
 	for v,e in pairs(level.entities) do
-		if math.floor(e.y) == y then
-			renderEntity(e)
+		if e ~= nil then
+			if math.floor(e.y) == y then
+				renderEntity(e)
+			end
 		end
 	end
 end
