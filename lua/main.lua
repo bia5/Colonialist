@@ -25,8 +25,8 @@ require("menu_main") -- Main menu
 
 generateLevel()
 
-text_fps = TextView.new(font, "Fps 0", 0, 0, mya_getRenderer())
-text_fps:setColor(mya_getRenderer(), 15, 15, 15)
+--text_fps = TextView.new(font, "Fps 0", 0, 0, mya_getRenderer())
+--text_fps:setColor(mya_getRenderer(), 15, 15, 15)
 
 function event_mouseMotion(x, y)
 	mouseX = x
@@ -66,8 +66,8 @@ end
 
 function event_windowResize(w, h)
 	assets_updateFonts()
-	text_fps = TextView.new(font, "Fps 0", 0, 0, mya_getRenderer())
-	text_fps:setColor(mya_getRenderer(), 15, 15, 15)
+	--text_fps = TextView.new(font, "Fps 0", 0, 0, mya_getRenderer())
+	--text_fps:setColor(mya_getRenderer(), 15, 15, 15)
 	popups_windowResize(w, h)
 	wr_resize(w,h)
 	menu_main_resize(w,h)
@@ -75,7 +75,7 @@ end
 
 function event_update()
 	popups_update()
-	text_fps:setText("FPS "..mya_getFPS(), mya_getRenderer())
+	--text_fps:setText("FPS "..mya_getFPS(), mya_getRenderer())
 end
 
 function event_render()
@@ -86,7 +86,7 @@ function event_render()
 	end
 	popups_render()
 	if devmode == true then
-		text_fps:renderWH(mya_getRenderer(), mya_getWidth()/16, mya_getHeight()/32)
+		--text_fps:renderWH(mya_getRenderer(), mya_getWidth()/16, mya_getHeight()/32)
 	end
 end
 
